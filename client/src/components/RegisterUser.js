@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Form, Button, Alert, Container } from "react-bootstrap";
 import axios from "axios";
 import "../styles/RegisterUser.css";
-
+import { useNavigate } from "react-router-dom";
 const RegisterUser = () => {
   const [formData, setFormData] = useState({
     email: "",
@@ -18,7 +18,7 @@ const RegisterUser = () => {
       [e.target.name]: e.target.value,
     });
   };
-
+  const navigate = useNavigate();
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
@@ -95,6 +95,10 @@ const RegisterUser = () => {
 
           <Button variant="primary" type="submit" className="custom-button">
             Register
+          </Button>
+
+          <Button variant="link" onClick={() => navigate("/login")}>
+            Already have an account? Go to Login
           </Button>
         </Form>
       </Container>

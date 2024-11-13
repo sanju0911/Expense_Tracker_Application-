@@ -94,6 +94,10 @@ const LoginUser = () => {
           <Button variant="link" onClick={() => navigate("/register")}>
             Not registered? Go to Register
           </Button>
+
+          <Button variant="link" onClick={() => navigate("/forget-password")}>
+            Forgot Password?
+          </Button>
         </Form>
       </Container>
     </div>

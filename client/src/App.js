@@ -8,6 +8,8 @@ import AddExpenses from "./pages/AddExpenses";
 import ExploreExpenses from "./pages/ExploreExpenses";
 import Profile from "./pages/Profile";
 import AboutUs from "./pages/AboutUs";
+import ForgetPassword from "./pages/ForgetPassword";
+import ResetPassword from "./pages/ResetPassword";
 
 function App() {
   return (
@@ -21,6 +23,8 @@ function App() {
         <Route path="/profile" element={<Profile />} />
         <Route path="/about-us" element={<AboutUs />} />
         <Route path="/" element={<RegisterUser />} />
+        <Route path="/forget-password" element={<ForgetPassword />} />
+        <Route path="/reset-password" element={<ResetPassword />} />
       </Routes>
     </Router>
   );

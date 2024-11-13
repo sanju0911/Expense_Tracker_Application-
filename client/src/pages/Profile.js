@@ -75,19 +75,9 @@ const Profile = () => {
     }
   };
 
-  const isProfileComplete = () => {
-    return (
-      userData.firstName &&
-      userData.lastName &&
-      userData.age &&
-      userData.gender &&
-      userData.photo
-    );
-  };
-
   return (
     <div>
-      <NavigationBar isProfileComplete={isProfileComplete()} />
+      <NavigationBar />
       <Container className="mt-5">
         <h2>Profile</h2>
         {loading ? (

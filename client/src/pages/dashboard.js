@@ -22,23 +22,23 @@ const Dashboard = () => {
 
       fetchUserData(userId, token);
     }
-  }, [navigate]);
+  }, [fetchUserData]);
 
   const fetchUserData = async (userId, token) => {
     try {
-      const response = await axios.get(
-        "http://localhost:5000/api/auth/me",
-        { id: userId },
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      );
+      const response = await axios.get("http://localhost:5000/api/auth/me", {
+        headers: { Authorization: `Bearer ${token}` },
+      });
 
       if (response.status === 200) {
         setUserData(response.data.user);
       }
     } catch (err) {
-      setError(err.response?.data?.error || "Failed to fetch user data.");
+      if (err.response?.status === 401) {
+        navigate("/login");
+      } else {
+        setError(err.response?.data?.error || "Failed to fetch user data.");
+      }
     }
   };
 

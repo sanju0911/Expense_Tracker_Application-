@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Form, Button, Alert, Container } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 import "../styles/RegisterUser.css";
 
 const LoginUser = () => {
@@ -30,10 +31,23 @@ const LoginUser = () => {
     }
 
     try {
-      console.log("Login successful");
-      setSuccess("Login successful.");
+      const response = await axios.post(
+        "http://localhost:5000/api/auth/login",
+        {
+          email: formData.email,
+          password: formData.password,
+        }
+      );
+
+      if (response.status === 200) {
+        console.log("Login successful");
+        setSuccess("Login successful.");
+
+        localStorage.setItem("token", response.data.token);
+        navigate("/dashboard");
+      }
     } catch (err) {
-      setError("Login failed.");
+      setError(err.response?.data?.error || "Login failed.");
     }
   };
 

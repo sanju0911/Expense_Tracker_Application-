@@ -3,8 +3,10 @@ import { Form, Button, Alert, Container } from "react-bootstrap";
 import axios from "axios";
 import "../styles/RegisterUser.css";
 import { useNavigate } from "react-router-dom";
+
 const RegisterUser = () => {
   const [formData, setFormData] = useState({
+    username: "",
     email: "",
     password: "",
     confirmPassword: "",
@@ -12,19 +14,26 @@ const RegisterUser = () => {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
 
+  const navigate = useNavigate();
+
   const handleChange = (e) => {
     setFormData({
       ...formData,
       [e.target.name]: e.target.value,
     });
   };
-  const navigate = useNavigate();
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
     setSuccess("");
 
-    if (!formData.email || !formData.password || !formData.confirmPassword) {
+    if (
+      !formData.username ||
+      !formData.email ||
+      !formData.password ||
+      !formData.confirmPassword
+    ) {
       setError("All fields are mandatory.");
       return;
     }
@@ -35,14 +44,21 @@ const RegisterUser = () => {
     }
 
     try {
-      const response = await axios.post("http://localhost:3000/api/register", {
-        email: formData.email,
-        password: formData.password,
-      });
+      const response = await axios.post(
+        "http://localhost:5000/api/auth/register",
+        {
+          username: formData.username,
+          email: formData.email,
+          password: formData.password,
+        }
+      );
 
-      if (response.status === 200) {
+      if (response.status === 201) {
         console.log("User has successfully signed up");
         setSuccess("User has successfully signed up.");
+        setTimeout(() => {
+          navigate("/login");
+        }, 1000);
       }
     } catch (err) {
       setError(err.response?.data?.message || "Registration failed.");
@@ -57,6 +73,18 @@ const RegisterUser = () => {
         {error && <Alert variant="danger">{error}</Alert>}
         {success && <Alert variant="success">{success}</Alert>}
         <Form onSubmit={handleSubmit}>
+          <Form.Group controlId="formUsername" className="mb-3">
+            <Form.Label>Username</Form.Label>
+            <Form.Control
+              type="text"
+              placeholder="Enter your username"
+              name="username"
+              value={formData.username}
+              onChange={handleChange}
+              required
+            />
+          </Form.Group>
+
           <Form.Group controlId="formEmail" className="mb-3">
             <Form.Label>Email address</Form.Label>
             <Form.Control

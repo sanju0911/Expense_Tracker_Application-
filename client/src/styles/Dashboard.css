@@ -1,0 +1,65 @@
+.dashboard-container {
+    font-family: 'Arial', sans-serif;
+  }
+  
+  .navbar {
+    margin-bottom: 20px;
+  }
+  
+  .main-content {
+    margin-top: 50px;
+    padding: 30px;
+    background-color: #f9f9f9;
+    border-radius: 10px;
+  }
+  
+  .user-info {
+    text-align: center;
+    margin-bottom: 30px;
+  }
+  
+  .user-info h4 {
+    color: #333;
+    font-size: 24px;
+  }
+  
+  .description {
+    text-align: center;
+    margin-bottom: 40px;
+  }
+  
+  .description h2 {
+    font-size: 28px;
+    color: #007bff;
+  }
+  
+  .description p {
+    font-size: 18px;
+    color: #555;
+  }
+  
+  .description .row {
+    margin-top: 30px;
+  }
+  
+  .description h5 {
+    font-size: 20px;
+    color: #333;
+  }
+  
+  .footer {
+    background-color: #343a40;
+    color: #fff;
+    padding: 10px 0;
+  }
+  
+  .footer a {
+    color: #fff;
+    text-decoration: none;
+    font-weight: bold;
+  }
+  
+  .footer a:hover {
+    text-decoration: underline;
+  }
+  

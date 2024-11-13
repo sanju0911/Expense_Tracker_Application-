@@ -3,7 +3,7 @@ import { Container, Alert, Button } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { jwtDecode } from "jwt-decode";
-import NavigationBar from "../components/Navbar";
+import NavigationBar from "./Navbar";
 import "../styles/Dashboard.css";
 
 const Dashboard = () => {
@@ -26,7 +26,7 @@ const Dashboard = () => {
 
   const fetchUserData = async (userId, token) => {
     try {
-      const response = await axios.post(
+      const response = await axios.get(
         "http://localhost:5000/api/auth/me",
         { id: userId },
         {

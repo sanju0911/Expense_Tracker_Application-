@@ -1,6 +1,6 @@
 // src/pages/AboutUs.js
 import React from "react";
-import NavigationBar from "../components/Navbar";
+import NavigationBar from "./Navbar";
 
 const AboutUs = () => {
   return (

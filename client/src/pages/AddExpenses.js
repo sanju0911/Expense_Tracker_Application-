@@ -1,6 +1,5 @@
-// src/pages/AddExpenses.js
 import React from "react";
-import NavigationBar from "../components/Navbar";
+import NavigationBar from "./Navbar";
 
 const AddExpenses = () => {
   return (

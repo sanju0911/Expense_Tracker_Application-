@@ -12,6 +12,24 @@ const Dashboard = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
+    const fetchUserData = async (userId, token) => {
+      try {
+        const response = await axios.get("http://localhost:5000/api/auth/me", {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+
+        if (response.status === 200) {
+          setUserData(response.data.user);
+        }
+      } catch (err) {
+        if (err.response?.status === 401) {
+          navigate("/login");
+        } else {
+          setError(err.response?.data?.error || "Failed to fetch user data.");
+        }
+      }
+    };
+
     const token = localStorage.getItem("token");
 
     if (!token) {
@@ -22,25 +40,7 @@ const Dashboard = () => {
 
       fetchUserData(userId, token);
     }
-  }, [fetchUserData]);
-
-  const fetchUserData = async (userId, token) => {
-    try {
-      const response = await axios.get("http://localhost:5000/api/auth/me", {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-
-      if (response.status === 200) {
-        setUserData(response.data.user);
-      }
-    } catch (err) {
-      if (err.response?.status === 401) {
-        navigate("/login");
-      } else {
-        setError(err.response?.data?.error || "Failed to fetch user data.");
-      }
-    }
-  };
+  }, [navigate]);
 
   const handleLogout = () => {
     localStorage.removeItem("token");

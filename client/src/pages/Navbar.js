@@ -1,9 +1,17 @@
 // src/components/Navbar.js
 import React from "react";
 import { Navbar, Nav } from "react-bootstrap";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const NavigationBar = () => {
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+
+    navigate("/login");
+  };
+
   return (
     <Navbar bg="dark" variant="dark" expand="lg" className="navbar">
       <Navbar.Brand href="/dashboard">Expense Tracker</Navbar.Brand>
@@ -22,6 +30,10 @@ const NavigationBar = () => {
         </Nav.Link>
         <Nav.Link as={Link} to="/dashboard">
           Dashboard
+        </Nav.Link>
+
+        <Nav.Link onClick={handleLogout} style={{ cursor: "pointer" }}>
+          Logout
         </Nav.Link>
       </Nav>
     </Navbar>

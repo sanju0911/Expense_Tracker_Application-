@@ -70,7 +70,6 @@ const ExploreExpenses = () => {
       setError(err.response?.data?.error || "Failed to delete expense");
     }
   };
-
   const handleSaveChanges = async () => {
     try {
       const token = localStorage.getItem("token");
@@ -87,6 +86,7 @@ const ExploreExpenses = () => {
       );
 
       setShowEditModal(false);
+
       const response = await axios.get(
         "http://localhost:5000/api/expenses/",
         config

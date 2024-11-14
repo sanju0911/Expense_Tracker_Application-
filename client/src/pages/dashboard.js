@@ -3,7 +3,7 @@ import { Container, Alert, Button } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { jwtDecode } from "jwt-decode";
-import NavigationBar from "./Navbar";
+
 import "../styles/Dashboard.css";
 
 const Dashboard = () => {
@@ -49,7 +49,6 @@ const Dashboard = () => {
 
   return (
     <div className="dashboard-container">
-      <NavigationBar />
       <Container className="main-content">
         {error && <Alert variant="danger">{error}</Alert>}
 

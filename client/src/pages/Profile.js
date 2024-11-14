@@ -9,7 +9,6 @@ import {
   Col,
   Image,
 } from "react-bootstrap";
-import NavigationBar from "./Navbar";
 
 const Profile = () => {
   const [userData, setUserData] = useState({
@@ -77,7 +76,6 @@ const Profile = () => {
 
   return (
     <div>
-      <NavigationBar />
       <Container className="mt-5">
         <h2>Profile</h2>
         {loading ? (

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import NavigationBar from "./Navbar";
+
 import {
   Table,
   Alert,
@@ -98,7 +98,6 @@ const ExploreExpenses = () => {
   };
   return (
     <Container>
-      <NavigationBar />
       <h2 className="mt-4">Explore Expenses</h2>
       {loading && <Spinner animation="border" />}
       {error && <Alert variant="danger">{error}</Alert>}

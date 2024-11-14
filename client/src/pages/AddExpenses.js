@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
-import NavigationBar from "./Navbar";
+
 import { Form, Button, Alert, Container } from "react-bootstrap";
 
 const AddExpenses = () => {
@@ -43,7 +43,6 @@ const AddExpenses = () => {
 
   return (
     <Container>
-      <NavigationBar />
       <h2 className="mt-4">Add Expenses</h2>
       {message && <Alert variant="success">{message}</Alert>}
       {error && <Alert variant="danger">{error}</Alert>}

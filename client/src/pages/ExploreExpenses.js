@@ -20,7 +20,7 @@ const ExploreExpenses = () => {
   useEffect(() => {
     const fetchExpenses = async () => {
       try {
-        const token = localStorage.getItem("token"); // Assuming token is stored in localStorage
+        const token = localStorage.getItem("token");
         const config = {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -60,7 +60,7 @@ const ExploreExpenses = () => {
         `http://localhost:5000/api/expenses/${expenseId}`,
         config
       );
-      // Fetch the updated list of expenses after deletion
+
       const response = await axios.get(
         "http://localhost:5000/api/expenses/",
         config
@@ -80,14 +80,12 @@ const ExploreExpenses = () => {
         },
       };
 
-      // Update the expense, no need to store the response in `updatedExpense`
       await axios.put(
         `http://localhost:5000/api/expenses/${currentExpense._id}`,
         currentExpense,
         config
       );
 
-      // Close the modal and update the expenses list
       setShowEditModal(false);
       const response = await axios.get(
         "http://localhost:5000/api/expenses/",
@@ -148,7 +146,6 @@ const ExploreExpenses = () => {
         </Table>
       )}
 
-      {/* Edit Expense Modal */}
       {currentExpense && (
         <Modal show={showEditModal} onHide={() => setShowEditModal(false)}>
           <Modal.Header closeButton>

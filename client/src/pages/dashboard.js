@@ -5,6 +5,7 @@ import axios from "axios";
 import { jwtDecode } from "jwt-decode";
 
 import "../styles/Dashboard.css";
+import DownloadCSV from "../components/DownloadCSV";
 
 const Dashboard = () => {
   const [userData, setUserData] = useState(null);
@@ -55,9 +56,7 @@ const Dashboard = () => {
         {userData ? (
           <div className="user-info">
             <h4>Welcome, {userData.username}!</h4>
-            <Button variant="danger" onClick={handleLogout} className="mt-3">
-              Logout
-            </Button>
+            <DownloadCSV />
           </div>
         ) : (
           <p>Loading user data...</p>

@@ -1,5 +1,9 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+<<<<<<< HEAD
+=======
+import NavigationBar from "./Navbar";
+>>>>>>> parent of 87b8421 (added redux)
 import {
   Table,
   Alert,
@@ -107,6 +111,7 @@ const ExploreExpenses = () => {
 
   return (
     <Container>
+      <NavigationBar />
       <h2 className="mt-4">Explore Expenses</h2>
       {loading && <Spinner animation="border" />}
       {error && <Alert variant="danger">{error}</Alert>}

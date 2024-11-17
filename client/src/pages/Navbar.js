@@ -7,8 +7,10 @@ const NavigationBar = () => {
   const navigate = useNavigate();
 
   const handleLogout = () => {
+    // Clear the token from localStorage
     localStorage.removeItem("token");
 
+    // Redirect to the login page
     navigate("/login");
   };
 
@@ -31,7 +33,7 @@ const NavigationBar = () => {
         <Nav.Link as={Link} to="/dashboard">
           Dashboard
         </Nav.Link>
-
+        {/* Logout link */}
         <Nav.Link onClick={handleLogout} style={{ cursor: "pointer" }}>
           Logout
         </Nav.Link>

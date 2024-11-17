@@ -9,6 +9,7 @@ import {
   Col,
   Image,
 } from "react-bootstrap";
+import NavigationBar from "../components/Navbar";
 
 const Profile = () => {
   const [userData, setUserData] = useState({
@@ -74,8 +75,19 @@ const Profile = () => {
     }
   };
 
+  const isProfileComplete = () => {
+    return (
+      userData.firstName &&
+      userData.lastName &&
+      userData.age &&
+      userData.gender &&
+      userData.photo
+    );
+  };
+
   return (
     <div>
+      <NavigationBar isProfileComplete={isProfileComplete()} />
       <Container className="mt-5">
         <h2>Profile</h2>
         {loading ? (

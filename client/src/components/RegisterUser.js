@@ -56,9 +56,6 @@ const RegisterUser = () => {
       if (response.status === 201) {
         console.log("User has successfully signed up");
         setSuccess("User has successfully signed up.");
-        setTimeout(() => {
-          navigate("/login");
-        }, 1000);
       }
     } catch (err) {
       setError(err.response?.data?.message || "Registration failed.");

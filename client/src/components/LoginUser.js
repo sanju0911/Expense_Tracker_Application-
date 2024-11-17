@@ -42,9 +42,9 @@ const LoginUser = () => {
       if (response.status === 200) {
         console.log("Login successful");
         setSuccess("Login successful.");
-
+        // Store the token for authenticated routes
         localStorage.setItem("token", response.data.token);
-        navigate("/dashboard");
+        navigate("/dashboard"); // Redirect to a dashboard or protected page
       }
     } catch (err) {
       setError(err.response?.data?.error || "Login failed.");
@@ -93,10 +93,6 @@ const LoginUser = () => {
 
           <Button variant="link" onClick={() => navigate("/register")}>
             Not registered? Go to Register
-          </Button>
-
-          <Button variant="link" onClick={() => navigate("/forget-password")}>
-            Forgot Password?
           </Button>
         </Form>
       </Container>

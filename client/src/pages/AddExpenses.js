@@ -1,10 +1,9 @@
 import React, { useState } from "react";
+import { Container, Form, Button, Alert } from "react-bootstrap";
 import axios from "axios";
 
-import { Form, Button, Alert, Container } from "react-bootstrap";
-
-const AddExpenses = () => {
-  const [formData, setFormData] = useState({
+const AddExpense = () => {
+  const [expense, setExpense] = useState({
     name: "",
     amount: "",
     reason: "",
@@ -14,8 +13,10 @@ const AddExpenses = () => {
   const [error, setError] = useState(null);
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
+    setExpense({
+      ...expense,
+      [e.target.name]: e.target.value,
+    });
   };
 
   const handleSubmit = async (e) => {
@@ -28,70 +29,76 @@ const AddExpenses = () => {
         },
       };
 
-      const response = await axios.post(
+      await axios.post(
         "http://localhost:5000/api/expenses/add",
-        formData,
+        expense,
         config
       );
 
-      setMessage(response.data.message);
-      setFormData({ name: "", amount: "", reason: "", date: "" });
+      setMessage("Expense added successfully");
+      setExpense({ name: "", amount: "", reason: "", date: "" });
+      setError(null);
     } catch (err) {
       setError(err.response?.data?.error || "Failed to add expense");
+      setMessage(null);
     }
   };
 
   return (
-    <Container>
-      <h2 className="mt-4">Add Expenses</h2>
+    <Container className="mt-4">
+      <h2>Add Expense</h2>
       {message && <Alert variant="success">{message}</Alert>}
       {error && <Alert variant="danger">{error}</Alert>}
       <Form onSubmit={handleSubmit}>
-        <Form.Group controlId="formName" className="mb-3">
+        <Form.Group className="mb-3">
           <Form.Label>Name</Form.Label>
           <Form.Control
             type="text"
+            placeholder="Enter name"
             name="name"
-            value={formData.name}
+            value={expense.name}
             onChange={handleChange}
             required
           />
         </Form.Group>
-        <Form.Group controlId="formAmount" className="mb-3">
+        <Form.Group className="mb-3">
           <Form.Label>Amount</Form.Label>
           <Form.Control
             type="number"
+            placeholder="Enter amount"
             name="amount"
-            value={formData.amount}
+            value={expense.amount}
             onChange={handleChange}
             required
           />
         </Form.Group>
-        <Form.Group controlId="formReason" className="mb-3">
+        <Form.Group className="mb-3">
           <Form.Label>Reason</Form.Label>
           <Form.Control
             type="text"
+            placeholder="Enter reason"
             name="reason"
-            value={formData.reason}
+            value={expense.reason}
             onChange={handleChange}
             required
           />
         </Form.Group>
-        <Form.Group controlId="formDate" className="mb-3">
+        <Form.Group className="mb-3">
           <Form.Label>Date</Form.Label>
           <Form.Control
             type="date"
             name="date"
-            value={formData.date}
+            value={expense.date}
             onChange={handleChange}
+            required
           />
         </Form.Group>
         <Button variant="primary" type="submit">
-          Submit
+          Add Expense
         </Button>
       </Form>
     </Container>
   );
 };
 
-export default AddExpenses;
+export default AddExpense;

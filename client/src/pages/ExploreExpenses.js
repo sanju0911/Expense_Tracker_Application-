@@ -1,7 +1,5 @@
-<<<<<<< HEAD
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-
 import {
   Table,
   Alert,
@@ -22,6 +20,10 @@ const ExploreExpenses = () => {
     const fetchExpenses = async () => {
       try {
         const token = localStorage.getItem("token");
+        if (!token) {
+          throw new Error("No token found. Please log in.");
+        }
+
         const config = {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -33,9 +35,11 @@ const ExploreExpenses = () => {
           config
         );
         setExpenses(response.data);
-        setLoading(false);
       } catch (err) {
-        setError(err.response?.data?.error || "Failed to fetch expenses");
+        setError(
+          err.response?.data?.error || err.message || "Failed to fetch expenses"
+        );
+      } finally {
         setLoading(false);
       }
     };
@@ -51,6 +55,10 @@ const ExploreExpenses = () => {
   const handleDeleteClick = async (expenseId) => {
     try {
       const token = localStorage.getItem("token");
+      if (!token) {
+        throw new Error("No token found. Please log in.");
+      }
+
       const config = {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -61,19 +69,19 @@ const ExploreExpenses = () => {
         `http://localhost:5000/api/expenses/${expenseId}`,
         config
       );
-
-      const response = await axios.get(
-        "http://localhost:5000/api/expenses/",
-        config
-      );
-      setExpenses(response.data);
+      setExpenses(expenses.filter((expense) => expense._id !== expenseId));
     } catch (err) {
       setError(err.response?.data?.error || "Failed to delete expense");
     }
   };
+
   const handleSaveChanges = async () => {
     try {
       const token = localStorage.getItem("token");
+      if (!token) {
+        throw new Error("No token found. Please log in.");
+      }
+
       const config = {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -87,16 +95,16 @@ const ExploreExpenses = () => {
       );
 
       setShowEditModal(false);
-
-      const response = await axios.get(
-        "http://localhost:5000/api/expenses/",
-        config
+      setExpenses((prevExpenses) =>
+        prevExpenses.map((expense) =>
+          expense._id === currentExpense._id ? currentExpense : expense
+        )
       );
-      setExpenses(response.data);
     } catch (err) {
       setError(err.response?.data?.error || "Failed to update expense");
     }
   };
+
   return (
     <Container>
       <h2 className="mt-4">Explore Expenses</h2>
@@ -154,9 +162,10 @@ const ExploreExpenses = () => {
           <Modal.Body>
             <form>
               <div className="mb-3">
-                <label>Name</label>
+                <label htmlFor="name">Name</label>
                 <input
                   type="text"
+                  id="name"
                   className="form-control"
                   value={currentExpense.name}
                   onChange={(e) =>
@@ -168,9 +177,10 @@ const ExploreExpenses = () => {
                 />
               </div>
               <div className="mb-3">
-                <label>Amount</label>
+                <label htmlFor="amount">Amount</label>
                 <input
                   type="number"
+                  id="amount"
                   className="form-control"
                   value={currentExpense.amount}
                   onChange={(e) =>
@@ -182,9 +192,10 @@ const ExploreExpenses = () => {
                 />
               </div>
               <div className="mb-3">
-                <label>Reason</label>
+                <label htmlFor="reason">Reason</label>
                 <input
                   type="text"
+                  id="reason"
                   className="form-control"
                   value={currentExpense.reason}
                   onChange={(e) =>
@@ -196,9 +207,10 @@ const ExploreExpenses = () => {
                 />
               </div>
               <div className="mb-3">
-                <label>Date</label>
+                <label htmlFor="date">Date</label>
                 <input
                   type="date"
+                  id="date"
                   className="form-control"
                   value={
                     new Date(currentExpense.date).toISOString().split("T")[0]
@@ -224,17 +236,6 @@ const ExploreExpenses = () => {
         </Modal>
       )}
     </Container>
-=======
-import React from "react";
-import NavigationBar from "./Navbar";
-
-const ExploreExpenses = () => {
-  return (
-    <div>
-      <NavigationBar />
-      <h2>Explore Expenses</h2>
-    </div>
->>>>>>> parent of 9a3b3cf (added uodate expense)
   );
 };
 

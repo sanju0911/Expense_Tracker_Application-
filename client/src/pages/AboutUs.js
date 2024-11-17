@@ -1,12 +1,13 @@
 // src/pages/AboutUs.js
 import React from "react";
-
+import NavigationBar from "./Navbar";
 import { Container, Row, Col, Card } from "react-bootstrap";
 import "../styles/AboutUs.css";
 
 const AboutUs = () => {
   return (
     <div>
+      <NavigationBar />
       <Container className="mt-5 about-us-container">
         <Row className="text-center mb-4">
           <Col>

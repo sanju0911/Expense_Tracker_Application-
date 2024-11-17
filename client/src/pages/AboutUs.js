@@ -2,7 +2,6 @@
 import React from "react";
 import NavigationBar from "./Navbar";
 import { Container, Row, Col, Card } from "react-bootstrap";
-import "../styles/AboutUs.css";
 
 const AboutUs = () => {
   return (

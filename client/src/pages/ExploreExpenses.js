@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 
@@ -223,6 +224,17 @@ const ExploreExpenses = () => {
         </Modal>
       )}
     </Container>
+=======
+import React from "react";
+import NavigationBar from "./Navbar";
+
+const ExploreExpenses = () => {
+  return (
+    <div>
+      <NavigationBar />
+      <h2>Explore Expenses</h2>
+    </div>
+>>>>>>> parent of 9a3b3cf (added uodate expense)
   );
 };
 

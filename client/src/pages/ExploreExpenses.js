@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-<<<<<<< HEAD
-=======
+
 import NavigationBar from "./Navbar";
->>>>>>> parent of 87b8421 (added redux)
+
 import {
   Table,
   Alert,

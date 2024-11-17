@@ -9,7 +9,7 @@ import {
   Col,
   Image,
 } from "react-bootstrap";
-import NavigationBar from "../components/Navbar";
+import NavigationBar from "./Navbar";
 
 const Profile = () => {
   const [userData, setUserData] = useState({

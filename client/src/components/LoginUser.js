@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import { Form, Button, Alert, Container } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import { useDispatch } from "react-redux"; // Import useDispatch
+import { login } from "../actions/authActions"; // Import login action
 import "../styles/RegisterUser.css";
 
 const LoginUser = () => {
@@ -12,6 +13,7 @@ const LoginUser = () => {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const handleChange = (e) => {
     setFormData({
@@ -31,21 +33,11 @@ const LoginUser = () => {
     }
 
     try {
-      const response = await axios.post(
-        "http://localhost:5000/api/auth/login",
-        {
-          email: formData.email,
-          password: formData.password,
-        }
+      await dispatch(
+        login({ email: formData.email, password: formData.password })
       );
-
-      if (response.status === 200) {
-        console.log("Login successful");
-        setSuccess("Login successful.");
-
-        localStorage.setItem("token", response.data.token);
-        navigate("/dashboard");
-      }
+      setSuccess("Login successful.");
+      navigate("/dashboard");
     } catch (err) {
       setError(err.response?.data?.error || "Login failed.");
     }

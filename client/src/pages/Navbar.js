@@ -1,16 +1,18 @@
-// src/components/Navbar.js
 import React from "react";
 import { Navbar, Nav } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux"; // Import useDispatch
+import { logout } from "../actions/authActions"; // Import logout action
 
 const NavigationBar = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const handleLogout = () => {
-    // Clear the token from localStorage
+    dispatch(logout());
+
     localStorage.removeItem("token");
 
-    // Redirect to the login page
     navigate("/login");
   };
 
@@ -33,7 +35,7 @@ const NavigationBar = () => {
         <Nav.Link as={Link} to="/dashboard">
           Dashboard
         </Nav.Link>
-        {/* Logout link */}
+
         <Nav.Link onClick={handleLogout} style={{ cursor: "pointer" }}>
           Logout
         </Nav.Link>

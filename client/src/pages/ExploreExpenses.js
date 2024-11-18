@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 import NavigationBar from "./Navbar";
 import {
@@ -12,9 +13,14 @@ import {
   Col,
 } from "react-bootstrap";
 import { jsPDF } from "jspdf"; // Import jsPDF library
+import { fetchExpenses } from "../actions/expensesActions"; // Import action to fetch expenses
 
 const ExploreExpenses = () => {
-  const [expenses, setExpenses] = useState([]);
+  const dispatch = useDispatch();
+  const { expenses, showPremiumButton } = useSelector(
+    (state) => state.expenses
+  ); // Get expenses from Redux store
+  const { token } = useSelector((state) => state.auth); // Get token from Redux store
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [showEditModal, setShowEditModal] = useState(false);
@@ -22,27 +28,15 @@ const ExploreExpenses = () => {
   const [totalExpenses, setTotalExpenses] = useState(0); // New state to hold the total amount
 
   useEffect(() => {
-    const fetchExpenses = async () => {
+    const fetchData = async () => {
       try {
-        const token = localStorage.getItem("token");
         if (!token) {
           throw new Error("No token found. Please log in.");
         }
-
-        const config = {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        };
-
-        // Fetch all expenses
-        const expensesResponse = await axios.get(
-          "http://localhost:5000/api/expenses/",
-          config
-        );
-        setExpenses(expensesResponse.data);
-
+        // Fetch expenses
+        dispatch(fetchExpenses());
         // Fetch total expenses
+        const config = { headers: { Authorization: `Bearer ${token}` } };
         const totalResponse = await axios.get(
           "http://localhost:5000/api/expenses/ExpenseId", // Adjust the route if necessary
           config
@@ -56,9 +50,8 @@ const ExploreExpenses = () => {
         setLoading(false);
       }
     };
-
-    fetchExpenses();
-  }, []);
+    fetchData();
+  }, [dispatch, token]);
 
   const handleEditClick = (expense) => {
     setCurrentExpense(expense);
@@ -67,77 +60,43 @@ const ExploreExpenses = () => {
 
   const handleDeleteClick = async (expenseId) => {
     try {
-      const token = localStorage.getItem("token");
-      if (!token) {
-        throw new Error("No token found. Please log in.");
-      }
-
       const config = {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       };
-
       await axios.delete(
         `http://localhost:5000/api/expenses/${expenseId}`,
         config
       );
-      setExpenses(expenses.filter((expense) => expense._id !== expenseId));
+      dispatch(fetchExpenses());
     } catch (err) {
       setError(err.response?.data?.error || "Failed to delete expense");
     }
   };
 
-  // Function to handle saving changes after editing an expense
   const handleSaveChanges = async () => {
     try {
-      const token = localStorage.getItem("token");
-      if (!token) {
-        throw new Error("No token found. Please log in.");
-      }
-
-      const config = {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      };
-
+      const config = { headers: { Authorization: `Bearer ${token}` } };
       await axios.put(
         `http://localhost:5000/api/expenses/${currentExpense._id}`,
         currentExpense,
         config
       );
-
       setShowEditModal(false);
-      setExpenses((prevExpenses) =>
-        prevExpenses.map((expense) =>
-          expense._id === currentExpense._id ? currentExpense : expense
-        )
-      );
+      dispatch(fetchExpenses()); // Re-fetch expenses after saving changes
     } catch (err) {
       setError(err.response?.data?.error || "Failed to update expense");
     }
   };
 
-  // Function to handle small changes in the currentExpense and automatically update the backend
   const handleExpenseChange = async (e) => {
     const { id, value } = e.target;
     const updatedExpense = { ...currentExpense, [id]: value };
     setCurrentExpense(updatedExpense);
 
     try {
-      const token = localStorage.getItem("token");
-      if (!token) {
-        throw new Error("No token found. Please log in.");
-      }
-
-      const config = {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      };
-
-      // API call to save changes immediately
+      const config = { headers: { Authorization: `Bearer ${token}` } };
       await axios.put(
         `http://localhost:5000/api/expenses/${currentExpense._id}`,
         updatedExpense,
@@ -148,22 +107,15 @@ const ExploreExpenses = () => {
     }
   };
 
-  // Function to generate and download the PDF of expenses
   const downloadPDF = () => {
     const doc = new jsPDF();
-
-    // Add title
     doc.setFontSize(20);
     doc.text("Expenses Report", 14, 22);
-
-    // Add column headers
     doc.setFontSize(12);
     doc.text("Name", 14, 30);
     doc.text("Amount", 60, 30);
     doc.text("Reason", 100, 30);
     doc.text("Date", 160, 30);
-
-    // Add each expense to the PDF
     expenses.forEach((expense, index) => {
       const yPosition = 40 + index * 10;
       doc.text(expense.name, 14, yPosition);
@@ -171,8 +123,6 @@ const ExploreExpenses = () => {
       doc.text(expense.reason, 100, yPosition);
       doc.text(new Date(expense.date).toLocaleDateString(), 160, yPosition);
     });
-
-    // Save the PDF to the local system
     doc.save("expenses_report.pdf");
   };
 
@@ -182,8 +132,7 @@ const ExploreExpenses = () => {
       <Container>
         <Row>
           <Col className="d-flex justify-content-end mt-4">
-            <h4>Total Expenses: ${totalExpenses}</h4>{" "}
-            {/* Display total expenses */}
+            <h4>Total Expenses: ${totalExpenses}</h4>
           </Col>
         </Row>
         <h2 className="mt-4">Explore Expenses</h2>
@@ -233,8 +182,7 @@ const ExploreExpenses = () => {
           </Table>
         )}
 
-        {/* Show the Download PDF button if total expenses exceed 100,000 */}
-        {totalExpenses >= 100000 && (
+        {showPremiumButton && (
           <div className="d-flex justify-content-center mt-4">
             <Button variant="success" onClick={downloadPDF}>
               Download Expenses as PDF
@@ -285,7 +233,7 @@ const ExploreExpenses = () => {
                     type="date"
                     id="date"
                     className="form-control"
-                    value={currentExpense.date.split("T")[0]} // Convert to the right format
+                    value={currentExpense.date}
                     onChange={handleExpenseChange}
                   />
                 </div>

@@ -2,7 +2,8 @@ import React, { useState, useEffect, useCallback } from "react";
 import { Container, Alert, Row, Col, Image } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import { jwtDecode } from "jwt-decode";
+
+import { useSelector } from "react-redux";
 import NavigationBar from "./Navbar";
 import "../styles/Dashboard.css";
 
@@ -11,8 +12,11 @@ const Dashboard = () => {
   const [error, setError] = useState("");
   const navigate = useNavigate();
 
+  const token = useSelector((state) => state.auth.token);
+  const { isAuthenticated } = useSelector((state) => state.auth);
+
   const fetchUserData = useCallback(
-    async (userId, token) => {
+    async (token) => {
       try {
         const response = await axios.get("http://localhost:5000/api/auth/me", {
           headers: { Authorization: `Bearer ${token}` },
@@ -33,17 +37,22 @@ const Dashboard = () => {
   );
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
-
     if (!token) {
       navigate("/login");
     } else {
-      const decodedToken = jwtDecode(token);
-      const userId = decodedToken.id;
-
-      fetchUserData(userId, token);
+      fetchUserData(token);
     }
-  }, [navigate, fetchUserData]);
+  }, [token, fetchUserData, navigate]);
+
+  useEffect(() => {
+    if (!isAuthenticated) {
+      navigate("/login");
+    }
+  }, [isAuthenticated, navigate]);
+
+  if (!userData && !error) {
+    return <p>Loading user data...</p>;
+  }
 
   return (
     <div className="dashboard-container">
@@ -55,10 +64,9 @@ const Dashboard = () => {
           <div className="user-info text-center">
             <h4>Welcome, {userData.username}!</h4>
 
-            {/* Display Profile Image */}
             {userData.photo ? (
               <Image
-                src={`http://localhost:5000${userData.photo}`} // Add the server base URL
+                src={`http://localhost:5000${userData.photo}`}
                 roundedCircle
                 className="profile-image"
                 style={{
@@ -72,7 +80,7 @@ const Dashboard = () => {
               />
             ) : (
               <Image
-                src="/default-avatar.png" // Use default avatar if no photo
+                src="/default-avatar.png"
                 roundedCircle
                 className="profile-image"
                 style={{

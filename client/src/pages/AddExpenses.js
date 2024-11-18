@@ -1,7 +1,9 @@
 import React, { useState } from "react";
 import { Container, Form, Button, Alert } from "react-bootstrap";
-import axios from "axios";
+import { useDispatch } from "react-redux"; // Import useDispatch to dispatch actions
+import { addExpense } from "../actions/expensesActions";
 import NavigationBar from "./Navbar";
+
 const AddExpense = () => {
   const [expense, setExpense] = useState({
     name: "",
@@ -11,6 +13,8 @@ const AddExpense = () => {
   });
   const [message, setMessage] = useState(null);
   const [error, setError] = useState(null);
+
+  const dispatch = useDispatch();
 
   const handleChange = (e) => {
     setExpense({
@@ -22,18 +26,7 @@ const AddExpense = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const token = localStorage.getItem("token");
-      const config = {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      };
-
-      await axios.post(
-        "http://localhost:5000/api/expenses/add",
-        expense,
-        config
-      );
+      await dispatch(addExpense(expense));
 
       setMessage("Expense added successfully");
       setExpense({ name: "", amount: "", reason: "", date: "" });

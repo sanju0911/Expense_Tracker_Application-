@@ -61,7 +61,7 @@ const RegisterUser = () => {
         }, 1000);
       }
     } catch (err) {
-      const errorMessage = err.response?.data?.error; // Updated to use 'error' instead of 'message'
+      const errorMessage = err.response?.data?.error;
       const statusCode = err.response?.status;
 
       if (statusCode === 400 && errorMessage === "Email already exists") {

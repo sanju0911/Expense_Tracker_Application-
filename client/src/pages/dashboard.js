@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from "react";
-import { Container, Alert, Button } from "react-bootstrap";
+import { Container, Alert, Row, Col, Image } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { jwtDecode } from "jwt-decode";
@@ -45,11 +45,6 @@ const Dashboard = () => {
     }
   }, [navigate, fetchUserData]);
 
-  const handleLogout = () => {
-    localStorage.removeItem("token");
-    navigate("/login");
-  };
-
   return (
     <div className="dashboard-container">
       <NavigationBar />
@@ -57,24 +52,103 @@ const Dashboard = () => {
         {error && <Alert variant="danger">{error}</Alert>}
 
         {userData ? (
-          <div className="user-info">
+          <div className="user-info text-center">
             <h4>Welcome, {userData.username}!</h4>
-            <Button variant="danger" onClick={handleLogout} className="mt-3">
-              Logout
-            </Button>
+
+            {/* Display Profile Image */}
+            {userData.photo ? (
+              <Image
+                src={`http://localhost:5000${userData.photo}`} // Add the server base URL
+                roundedCircle
+                className="profile-image"
+                style={{
+                  maxWidth: "150px",
+                  maxHeight: "150px",
+                  width: "auto",
+                  height: "auto",
+                  objectFit: "cover",
+                  marginTop: "15px",
+                }}
+              />
+            ) : (
+              <Image
+                src="/default-avatar.png" // Use default avatar if no photo
+                roundedCircle
+                className="profile-image"
+                style={{
+                  maxWidth: "150px",
+                  maxHeight: "150px",
+                  width: "auto",
+                  height: "auto",
+                  objectFit: "cover",
+                  marginTop: "15px",
+                }}
+              />
+            )}
           </div>
         ) : (
           <p>Loading user data...</p>
         )}
 
-        <div className="description">
-          <h2 className="text-center mt-5">Expense Tracker</h2>
+        <div className="description mt-5">
+          <h2 className="text-center">Expense Tracker</h2>
           <p className="text-center">
             Manage your personal finances, track expenses, and stay on top of
-            your spending.
+            your spending with our user-friendly expense tracker application.
           </p>
         </div>
+
+        <Row className="benefits-section mt-5">
+          <Col md={6}>
+            <h5>Benefits of Using the Expense Tracker</h5>
+            <ul>
+              <li>Gain better control over your financial habits.</li>
+              <li>Identify areas where you can save money.</li>
+              <li>Set and track financial goals effectively.</li>
+              <li>Secure and easy-to-use interface for managing expenses.</li>
+            </ul>
+          </Col>
+          <Col md={6}>
+            <h5>How to Use the Application</h5>
+            <ol>
+              <li>Register or log in to access your dashboard.</li>
+              <li>Navigate to 'Add Expenses' to input your expense details.</li>
+              <li>
+                Explore past expenses under the 'Explore Expenses' section.
+              </li>
+              <li>Update your profile through the 'Profile' tab.</li>
+              <li>Track total spending and download reports.</li>
+            </ol>
+          </Col>
+        </Row>
       </Container>
+
+      <footer className="footer mt-5">
+        <Container>
+          <Row>
+            <Col className="text-center">
+              <p>Follow us:</p>
+              <a
+                href="https://www.instagram.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="social-link"
+              >
+                <i className="bi bi-instagram"></i> Instagram
+              </a>
+              {" | "}
+              <a
+                href="https://www.linkedin.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="social-link"
+              >
+                <i className="bi bi-linkedin"></i> LinkedIn
+              </a>
+            </Col>
+          </Row>
+        </Container>
+      </footer>
     </div>
   );
 };

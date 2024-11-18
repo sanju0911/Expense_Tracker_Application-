@@ -9,12 +9,10 @@ import ExploreExpenses from "./pages/ExploreExpenses";
 import AboutUs from "./pages/AboutUs";
 import ForgetPassword from "./pages/ForgetPassword";
 import ResetPassword from "./pages/ResetPassword";
-import NavigationBar from "./pages/Navbar";
 
 function App() {
   return (
     <Router>
-      <NavigationBar />
       <Routes>
         <Route path="/register" element={<RegisterUser />} />
         <Route path="/login" element={<LoginUser />} />

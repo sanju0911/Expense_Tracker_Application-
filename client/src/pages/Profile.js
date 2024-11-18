@@ -21,6 +21,7 @@ const Profile = () => {
     gender: "",
     photo: "",
   });
+  const [photoFile, setPhotoFile] = useState(null);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
   const [loading, setLoading] = useState(true);
@@ -53,16 +54,29 @@ const Profile = () => {
     });
   };
 
+  const handleFileChange = (e) => {
+    setPhotoFile(e.target.files[0]);
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const formData = new FormData();
+    formData.append("username", userData.username);
+    formData.append("firstName", userData.firstName);
+    formData.append("lastName", userData.lastName);
+    formData.append("age", userData.age);
+    formData.append("gender", userData.gender);
+    formData.append("photo", photoFile);
+
     try {
       const token = localStorage.getItem("token");
       const response = await axios.post(
         "http://localhost:5000/api/auth/me",
-        userData,
+        formData,
         {
           headers: {
             Authorization: `Bearer ${token}`,
+            "Content-Type": "multipart/form-data",
           },
         }
       );
@@ -93,15 +107,23 @@ const Profile = () => {
         {loading ? (
           <p>Loading...</p>
         ) : (
-          <Form onSubmit={handleSubmit}>
+          <Form onSubmit={handleSubmit} encType="multipart/form-data">
             <Row>
               <Col md={4}>
                 <Image
-                  src={userData.photo || "/default-avatar.png"}
+                  src={
+                    userData.photo
+                      ? `http://localhost:5000${userData.photo}`
+                      : "/default-avatar.png"
+                  }
                   roundedCircle
                   className="profile-image"
                   style={{ width: "150px", height: "150px" }}
                 />
+                <Form.Group controlId="photo" className="mt-3">
+                  <Form.Label>Upload Profile Picture</Form.Label>
+                  <Form.Control type="file" onChange={handleFileChange} />
+                </Form.Group>
               </Col>
               <Col md={8}>
                 {error && <Alert variant="danger">{error}</Alert>}

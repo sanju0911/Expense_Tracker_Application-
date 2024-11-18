@@ -42,9 +42,9 @@ const LoginUser = () => {
       if (response.status === 200) {
         console.log("Login successful");
         setSuccess("Login successful.");
-        // Store the token for authenticated routes
+
         localStorage.setItem("token", response.data.token);
-        navigate("/dashboard"); // Redirect to a dashboard or protected page
+        navigate("/dashboard");
       }
     } catch (err) {
       setError(err.response?.data?.error || "Login failed.");

@@ -56,12 +56,24 @@ const RegisterUser = () => {
       if (response.status === 201) {
         console.log("User has successfully signed up");
         setSuccess("User has successfully signed up.");
+        setTimeout(() => {
+          navigate("/login");
+        }, 1000);
       }
     } catch (err) {
-      setError(err.response?.data?.message || "Registration failed.");
+      const errorMessage = err.response?.data?.error; // Updated to use 'error' instead of 'message'
+      const statusCode = err.response?.status;
+
+      if (statusCode === 400 && errorMessage === "Email already exists") {
+        setError("Email already exists.");
+        setTimeout(() => {
+          navigate("/login");
+        }, 1000);
+      } else {
+        setError(errorMessage || "Registration failed.");
+      }
     }
   };
-
   return (
     <div className="register-container">
       <div className="watermark">Expense Tracking System</div>

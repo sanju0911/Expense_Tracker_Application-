@@ -1,6 +1,6 @@
 const initialState = {
-  token: localStorage.getItem("token") || null, // Load token from localStorage if available
-  isAuthenticated: localStorage.getItem("token") ? true : false, // Set isAuthenticated based on token presence
+  token: localStorage.getItem("token") || null,
+  isAuthenticated: localStorage.getItem("token") ? true : false,
   user: null,
   loading: true,
 };
@@ -8,12 +8,12 @@ const initialState = {
 export default function authReducer(state = initialState, action) {
   switch (action.type) {
     case "LOGIN_SUCCESS":
-      localStorage.setItem("token", action.payload.token); // Save token in localStorage
+      localStorage.setItem("token", action.payload.token);
       return { ...state, token: action.payload.token, isAuthenticated: true };
     case "LOGOUT":
-      localStorage.removeItem("token"); // Remove token on logout
+      localStorage.removeItem("token");
       return { ...state, token: null, isAuthenticated: false };
-    // other cases
+
     default:
       return state;
   }

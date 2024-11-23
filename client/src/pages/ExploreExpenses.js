@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 import NavigationBar from "./Navbar";
@@ -12,36 +12,47 @@ import {
   Row,
   Col,
 } from "react-bootstrap";
-import { jsPDF } from "jspdf"; // Import jsPDF library
-import { fetchExpenses } from "../actions/expensesActions"; // Import action to fetch expenses
+import { jsPDF } from "jspdf";
+import { fetchExpenses } from "../actions/expensesActions";
 
 const ExploreExpenses = () => {
   const dispatch = useDispatch();
   const { expenses, showPremiumButton } = useSelector(
     (state) => state.expenses
-  ); // Get expenses from Redux store
-  const { token } = useSelector((state) => state.auth); // Get token from Redux store
+  );
+  const { token } = useSelector((state) => state.auth);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [showEditModal, setShowEditModal] = useState(false);
   const [currentExpense, setCurrentExpense] = useState(null);
-  const [totalExpenses, setTotalExpenses] = useState(0); // New state to hold the total amount
+  const [totalExpenses, setTotalExpenses] = useState(0);
+
+  const fetchTotalExpenses = useCallback(async () => {
+    try {
+      if (!token) {
+        throw new Error("No token found. Please log in.");
+      }
+
+      const config = { headers: { Authorization: `Bearer ${token}` } };
+      const totalResponse = await axios.get(
+        "http://localhost:5000/api/expenses/ExpenseId",
+        config
+      );
+      setTotalExpenses(totalResponse.data.total);
+    } catch (err) {
+      setError(
+        err.response?.data?.error ||
+          err.message ||
+          "Failed to fetch total expenses"
+      );
+    }
+  }, [token]);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        if (!token) {
-          throw new Error("No token found. Please log in.");
-        }
-        // Fetch expenses
         dispatch(fetchExpenses());
-        // Fetch total expenses
-        const config = { headers: { Authorization: `Bearer ${token}` } };
-        const totalResponse = await axios.get(
-          "http://localhost:5000/api/expenses/ExpenseId", // Adjust the route if necessary
-          config
-        );
-        setTotalExpenses(totalResponse.data.total); // Set the total expenses
+        await fetchTotalExpenses();
       } catch (err) {
         setError(
           err.response?.data?.error || err.message || "Failed to fetch expenses"
@@ -51,7 +62,7 @@ const ExploreExpenses = () => {
       }
     };
     fetchData();
-  }, [dispatch, token]);
+  }, [dispatch, fetchTotalExpenses]);
 
   const handleEditClick = (expense) => {
     setCurrentExpense(expense);
@@ -70,6 +81,7 @@ const ExploreExpenses = () => {
         config
       );
       dispatch(fetchExpenses());
+      await fetchTotalExpenses();
     } catch (err) {
       setError(err.response?.data?.error || "Failed to delete expense");
     }
@@ -84,7 +96,8 @@ const ExploreExpenses = () => {
         config
       );
       setShowEditModal(false);
-      dispatch(fetchExpenses()); // Re-fetch expenses after saving changes
+      dispatch(fetchExpenses());
+      await fetchTotalExpenses();
     } catch (err) {
       setError(err.response?.data?.error || "Failed to update expense");
     }
@@ -102,6 +115,7 @@ const ExploreExpenses = () => {
         updatedExpense,
         config
       );
+      await fetchTotalExpenses();
     } catch (err) {
       setError(err.response?.data?.error || "Failed to update expense");
     }

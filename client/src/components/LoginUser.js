@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { Form, Button, Alert, Container } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux"; // Import useDispatch
-import { login } from "../actions/authActions"; // Import login action
+import { useDispatch } from "react-redux";
+import { login } from "../actions/authActions";
 import "../styles/RegisterUser.css";
 
 const LoginUser = () => {
@@ -85,6 +85,9 @@ const LoginUser = () => {
 
           <Button variant="link" onClick={() => navigate("/register")}>
             Not registered? Go to Register
+          </Button>
+          <Button variant="link" onClick={() => navigate("/forget-password")}>
+            Forget Password?
           </Button>
         </Form>
       </Container>

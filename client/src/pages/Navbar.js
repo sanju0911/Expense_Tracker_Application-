@@ -1,8 +1,8 @@
 import React from "react";
 import { Navbar, Nav } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux"; // Import useDispatch
-import { logout } from "../actions/authActions"; // Import logout action
+import { useDispatch } from "react-redux";
+import { logout } from "../actions/authActions";
 
 const NavigationBar = () => {
   const navigate = useNavigate();

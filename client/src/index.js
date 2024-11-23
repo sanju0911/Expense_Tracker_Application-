@@ -7,7 +7,6 @@ import store from "./store";
 import reportWebVitals from "./reportWebVitals";
 import "bootstrap/dist/css/bootstrap.min.css";
 
-// Use createRoot instead of render
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
 root.render(

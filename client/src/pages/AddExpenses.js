@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Container, Form, Button, Alert } from "react-bootstrap";
-import { useDispatch } from "react-redux"; // Import useDispatch to dispatch actions
+import { useDispatch } from "react-redux";
 import { addExpense } from "../actions/expensesActions";
 import NavigationBar from "./Navbar";
 
